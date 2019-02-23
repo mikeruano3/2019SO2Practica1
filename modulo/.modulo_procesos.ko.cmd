@@ -1,0 +1,1 @@
+cmd_/home/miguel/Escritorio/2019SO2Practica1/modulo/modulo_procesos.ko := ld -r -m elf_x86_64 -T ./scripts/module-common.lds --build-id  -o /home/miguel/Escritorio/2019SO2Practica1/modulo/modulo_procesos.ko /home/miguel/Escritorio/2019SO2Practica1/modulo/modulo_procesos.o /home/miguel/Escritorio/2019SO2Practica1/modulo/modulo_procesos.mod.o
