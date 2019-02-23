@@ -36,6 +36,7 @@ public class Matar extends HttpServlet {
             out.print("{\"matando... \":\""+request.getParameter("processid")+"\"}");
             Runtime.getRuntime().exec("kill "+ request.getParameter("processid"));
         }
+        response.sendRedirect("/ProcesosView.jsp");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

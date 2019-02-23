@@ -1,5 +1,5 @@
 <%-- 
-    Document   : CpuView
+    Document   : RAMView
     Created on : 22/02/2019, 03:26:33 PM
     Author     : miguel
 --%>
@@ -25,7 +25,7 @@
 
             var funcionIntervalor = function(){
                 $.ajax({
-                    url:"/PaginaWeb/Cpu",
+                    url:"/PaginaWeb/Mem",
                     type: 'GET',
                     // DATOS PARA MANDAR AL SERVIDOR
                     data: {
@@ -33,41 +33,27 @@
                     },
                     dataType: 'json',
                     success : function(data){
-                        if(data.tipo === "NORMAL"){
-                            var i, html, iteml;
-                        }
-                        
-                        
+                                                
                         /**** CODIGO PARA MOSTRAR EL USO DEL CPU ****/
                         
-                        var USER = 0, NICE = 0, SYSTEM = 0, IDLE = 0, IOWAIT = 0;
-                        var IRQ = 0, SOFTIRQ = 0, STEAL = 0, GUEST = 0, GUESTNICE = 0, PORCALCULADO = 0;
-                        var totald = 0, idled = 0, CPU_Percentage = 0;
-                        
+                        var MemTotal = 0, MemFree = 0, MemAvailable = 0, Buffers = 0;
+                        var librePorc = 0;
                         try{
                             //cpuinfo = JSON.parse(data);
-                            cpuinfo = data;
-                            USER = cpuinfo.USER;
-                            NICE = cpuinfo.NICE;
-                            SYSTEM = cpuinfo.SYSTEM;
-                            IDLE = cpuinfo.IDLE;
-                            IOWAIT = cpuinfo.IOWAIT;
-                            IRQ = cpuinfo.IRQ;
-                            SOFTIRQ = cpuinfo.SOFTIRQ;
-                            STEAL = cpuinfo.STEAL;
-                            GUEST = cpuinfo.GUEST;
-                            GUESTNICE = cpuinfo.GUESTNICE;
-                            PORCALCULADO = cpuinfo.PORCALCULADO;
-
-                            var CPU_Percentage = ((USER+NICE+SYSTEM+IDLE+IOWAIT+IRQ+SOFTIRQ+STEAL)-(IDLE + IOWAIT)) / (USER+NICE+SYSTEM+IDLE+IOWAIT+IRQ+SOFTIRQ+STEAL)*100;
-                            if(CPU_Percentage === 0){
-                                tipo = "ERROR";
-                                console.log("ERROR");
-                            }
-                            idled = IDLE;
+                            var meminfo = data;
+                            MemTotal = meminfo.MemTotal;
+                            MemFree = meminfo.MemFree;
+                            MemAvailable = meminfo.MemAvailable;
+                            Buffers = meminfo.Buffers;
+                            
+                            var PorcMem = (MemTotal-MemFree)*100/MemTotal;
+                            var KBMem = MemTotal-MemFree;
                             //alert(idled+ ", "+CPU_Percentage);
-                            document.getElementById("usadoPorc").innerHTML = "Porcentaje: " + CPU_Percentage + "%";
-                            cola.push(CPU_Percentage);
+                            document.getElementById("usadoPorc").innerHTML = "Porcentaje: " + PorcMem + "%";
+                            document.getElementById("usadoKB").innerHTML = "Memoria Usada: " + KBMem + " KB";
+                            document.getElementById("memTotal").innerHTML = "Memoria Total: " + MemTotal + " KB";
+                            cola.push(PorcMem);
+                            
                         }catch(err){
                             console.log(err);
                         }
@@ -153,8 +139,8 @@
                     shadowSize: 10	// Drawing is faster without shadows
                 },
                 yaxis: {
-                    min: 20,
-                    max: 60
+                    min: 0,
+                    max: 100
                 },
                 xaxis: {
                     show: false
@@ -181,10 +167,11 @@
         <title>Uso del CPU</title>
     </head>
     <body>
-        <h1>CPU Usado</h1>
+        <h1>Memoria Usada</h1>
             <div id="content"></div>
                <h3 id="usadoKB"> </h3>
                <h3 id="usadoPorc"> </h3>
+               <h3 id="memTotal"> </h3>
                
                <div id="placeholder" style="width:800px;height:600px"></div>
                
